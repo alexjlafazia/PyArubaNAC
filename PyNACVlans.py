@@ -22,11 +22,13 @@ def AddL2NACVlan(ip, usr, paswd):
     output1 = net_connect.send_config_set(vlan50)
     output2 = net_connect.send_config_set(vlan66)
     output3 = net_connect.send_config_set(vlan70)
+    output4 = net_connect.send_config_set(vlan70)
 
     print (output)
     print (output1)
     print (output2)
     print (output3)
+    print (output4)
 
 def AddL3NACVlan(ip, usr, paswd):
     
@@ -46,13 +48,13 @@ def AddL3NACVlan(ip, usr, paswd):
 
     vlan999 = ["vlan 999","no ip address","name iOT-Trust", ipVlan999]
   
-    vlan40 = ["vlan 40","name Staff", tagged, ipVlan40, ipHelper]
+    vlan40 = ["vlan 40","name Staff", tagged, ipVlan40, ipHelper, "dhcp-snooping"]
 
-    vlan50 = ["vlan 50","name Student", tagged, ipVlan50, ipHelper]
+    vlan50 = ["vlan 50","name Student", tagged, ipVlan50, ipHelper, "dhcp-snooping"]
 
-    vlan66 = ["vlan 66","name Un-Authenticated", tagged, ipVlan66, ipHelper]
+    vlan66 = ["vlan 66","name Un-Authenticated", tagged, ipVlan66, ipHelper, "dhcp-snooping"]
 
-    vlan70 = ["vlan 70","name iOT-UnTrust", tagged, ipVlan70, ipHelper]
+    vlan70 = ["vlan 70","name iOT-UnTrust", tagged, ipVlan70, ipHelper, "dhcp-snooping"]
 
     net_connect.config_mode()
     output = net_connect.send_config_set(vlan999)
@@ -66,6 +68,10 @@ def AddL3NACVlan(ip, usr, paswd):
     print (output2)
     print (output3)
     print (output4)
+
+def AddL2NACPorts(ip, usr, paswd):
+
+    net_connect = ConnectHandler(device_type='hp_procurve', ip=ip, username='usr', password=paswd)
 
 ipsL2 = [line.rstrip("\n") for line in open("iplistL2.txt")]
 ipsL3 = [line.rstrip("\n") for line in open("iplistL3.txt")]
