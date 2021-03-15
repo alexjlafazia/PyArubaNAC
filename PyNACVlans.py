@@ -20,11 +20,10 @@ def AddL2NACVlan(ip, usr, paswd):
     vlan70 = ["vlan 70","name iOT-UnTrust", tagged, "ip igmp"]
     vlan999 = ["vlan 999","name iOT-Trust"]
 
-    net_connect.send_config_set(vlan40)
-    net_connect.send_config_set(vlan50)
-    net_connect.send_config_set(vlan66)
-    net_connect.send_config_set(vlan70)
-    net_connect.send_config_set(vlan999)
+    vlanChange = vlan40 + vlan50 + vlan66 + vlan70 + vlan999
+
+    net_connect.send_config_set(vlanChange)
+    prompt = net_connect.find_prompt()
     net_connect.save_config()
     net_connect.disconnect()
     
@@ -32,12 +31,13 @@ def AddL2NACVlan(ip, usr, paswd):
     with open('output.txt', 'r') as output:
         print(output.read())
 
-    prompt = net_connect.find_prompt()
+    #Notifies user of completion
     hostname = prompt[:-1]
     print("\n")
     print("#" * 30)
     print (hostname + " " + "-" + " " + "Complete")
     print("#" * 30)
+
 
 ########################################################################
 #Adds vlans to L3 Switches
@@ -69,20 +69,16 @@ def AddL3NACVlan(ip, usr, paswd):
     vlan66 = ["vlan 66","name Un-Authenticated", tagged, ipVlan66, ipHelper, "dhcp-snooping"]
     vlan70 = ["vlan 70","name iOT-UnTrust", tagged, ipVlan70, ipHelper, "dhcp-snooping"]
 
-    net_connect.send_config_set(vlan999)
-    net_connect.send_config_set(vlan40)
-    net_connect.send_config_set(vlan50)
-    net_connect.send_config_set(vlan66)
-    net_connect.send_config_set(vlan70)
+    net_connect.send_config_set(vlan999,vlan40,vlan50,vlan66,vlan70)
+    prompt = net_connect.find_prompt()
     net_connect.save_config()
     net_connect.disconnect()
-    
+
     #Prints output of switch
     with open('output.txt', 'r') as output:
         print(output.read())
-    
+
     #Notifies user of completion
-    prompt = net_connect.find_prompt()
     hostname = prompt[:-1]
     print("\n")
     print("#" * 30)
