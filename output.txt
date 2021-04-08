@@ -1,0 +1,56 @@
+[1;23r[1;1H[232;1HPress any key to continue[?25h[1000;27H[?7hYour previous successful login (as manager) was on 2021-04-07 19:35:34     
+ from 192.168.227.91
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# terminal width 511
+[?7h[?7hHAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# no page
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# show run vlan 999 | inc untagged
+   untagged 2,4,6,8,10,12,14,16-48
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# configure terminal
+HAR-IDF5-Rm3-AS1(config)# 
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.13 key $t0ckt0n4T@C@C$
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.13 dyn-authorization
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.13 time-window plus-or-minus-time-window
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.13 time-window 30
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.11 key $t0ckt0n4T@C@C$
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.11 dyn-authorization
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.11 time-window plus-or-minus-time-window
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.11 time-window 30
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.12 key $t0ckt0n4T@C@C$
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.12 dyn-authorization
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.12 time-window plus-or-minus-time-window
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.12 time-window 30
+HAR-IDF5-Rm3-AS1(config)# radius-server cppm identity aoss-dur key $t0ckt0n4T@C@C$
+HAR-IDF5-Rm3-AS1(config)# aaa authorization user-role enable download
+Some legacy secure client access functionality is not supported when user roles are enabled.
+Please refer to the end user documentation for details.
+
+ClearPass user name and password must be configured for downloading the user role.
+ClearPass HTTPS root certificate must be installed for downloading the user role.
+
+HAR-IDF5-Rm3-AS1(config)# radius-server host 10.1.60.13 clearpass
+HAR-IDF5-Rm3-AS1(config)# 
+HAR-IDF5-Rm3-AS1(config)# end
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# show crypto pki ta-profile
+  Profile Name    Profile Status                 CRL Configured  OCSP Configured
+  --------------- ------------------------------ --------------- ---------------
+  IDEVID_ROOT     Root Certificate Installed                                    
+  COMODO_RSA_CA   Root Certificate Installed     No              No             
+  GEOTRUST_CA     Root Certificate Installed     No              No             
+  ARUBA_CA        Root Certificate Installed     No              No             
+  Go Daddy Roo... Root Certificate Installed     No              No             
+ 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# write memory
+HAR-IDF5-Rm3-AS1# 
+HAR-IDF5-Rm3-AS1# logout
+Do you want to log out (y/n)? y
+[?7h[?7h
