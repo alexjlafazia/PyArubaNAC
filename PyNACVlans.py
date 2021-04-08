@@ -99,11 +99,10 @@ def AddL3NACVlan(ip, usr, paswd):
 
 
 ########################################################################
-#Adds vlans to L3 Switches
-#Including: vlan 40,vlan 50,vlan 66,vlan 70
-#locates tagged ports on Vlan 999 and apply to all vlans
-#Locates first 2 octets of sites IP address and creates new IP for vlan
-#Rename vlan 999 to iOT-Trust
+#Adds port configurations to L2 Switches
+#Including: Radius, Tacacs, aaa settings
+#locates untagged ports on Vlan 999 and applies all port configurations
+#Adds Key for radius and Tacacs server needs input from user
 ########################################################################
 
 def AddL2NACPorts(ip, usr, paswd, key):
