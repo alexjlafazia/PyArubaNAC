@@ -95,6 +95,7 @@ def AddL3NACVlan(ip, usr, paswd):
     print("\n")
     print("#" * 30)
     print (hostname + " " + "-" + " " + "Complete")
+    print('Duration: {}'.format(end_time - start_time))
     print("#" * 30)
 
 
@@ -105,11 +106,11 @@ def AddL3NACVlan(ip, usr, paswd):
 #Adds Key for radius and Tacacs server needs input from user
 ########################################################################
 
-def AddL2NACPorts(ip, usr, paswd, key):
+def AddL2NACPorts(ip, usr, paswd, key, cppmKey):
 
     start_time = datetime.now()
 
-    net_connect = ConnectHandler(device_type='hp_procurve', ip=ip, username=usr, password=paswd, session_log = 'output.txt')
+    net_connect = ConnectHandler(device_type='hp_procurve', ip=ip, username=usr, password=paswd, cppmKey=cppmKey, session_log = 'output.txt')
 
     untagged = net_connect.send_command("show run vlan 999 | inc untagged")
     untagged = re.sub('[ untagged ]', "", untagged)
@@ -127,14 +128,13 @@ def AddL2NACPorts(ip, usr, paswd, key):
         "radius-server host 10.1.60.12 dyn-authorization",
         "radius-server host 10.1.60.12 time-window plus-or-minus-time-window",
         "radius-server host 10.1.60.12 time-window 30",
-        "radius-server cppm identity aoss-dur key" + " " + key,
+        "radius-server cppm identity aoss-dur key" + " " + "aoss-dur",
         "aaa authorization user-role enable download",
         "radius-server host 10.1.60.13 clearpass"
     ]
 
     cert = [
-        "crypto ca-download usage clearpass force",
-        "show crypto pki ta-profile"
+        "crypto ca-download usage clearpass force"
     ]
 
     tacacs = [
@@ -159,8 +159,7 @@ def AddL2NACPorts(ip, usr, paswd, key):
         "aaa authorization user-role enable download",
         "aaa authorization user-role initial-role" + ' "' + "allowLimited" + '" ',
         "aaa authentication port-access eap-radius",
-        "aaa authentication mac-based eap-radius server-group" + ' "' + "CLEARPASS" + '" '
-        "aaa authentication mac-based peap-mschapv2 server-group CLEARPASS"
+        "aaa authentication mac-based chap-radius server-group" + ' "' + "CLEARPASS" + '" ',
     ]
 
     nacPort = [
@@ -178,9 +177,9 @@ def AddL2NACPorts(ip, usr, paswd, key):
 
     portChange = radius + cert + tacacs + aaa + nacPort
 
+    prompt = net_connect.find_prompt()
     net_connect.send_config_set(portChange)
     net_connect.send_command("show crypto pki ta-profile")
-    prompt = net_connect.find_prompt()
     net_connect.save_config()
     net_connect.disconnect()
 
@@ -195,6 +194,7 @@ def AddL2NACPorts(ip, usr, paswd, key):
     print("\n")
     print("#" * 30)
     print (hostname + " " + "-" + " " + "Complete")
+    print('Duration: {}'.format(end_time - start_time))
     print("#" * 30)
 
 ipsL2 = [line.rstrip("\n") for line in open("iplistL2.txt")]
@@ -203,13 +203,15 @@ portL2 = [line.rstrip("\n") for line in open("portL2.txt")]
 
 PassWD = getpass.getpass()
 
+radiusKey = input("Enter radius key: ")
+
+cppmKey = input("Enter CPPM key: ")
+
 for n in ipsL2:
     AddL2NACVlan(ip=n, usr='nsttech', paswd=PassWD)
 
 for n in ipsL3:
     AddL3NACVlan(ip=n, usr='nsttech', paswd=PassWD)
 
-radiusKey = input("Enter radius key: ")
-
 for n in portL2:
-    AddL2NACPorts(ip=n, usr='nsttech', paswd=PassWD, key=radiusKey)
+    AddL2NACPorts(ip=n, usr='nsttech', paswd=PassWD, key=radiusKey, cppmKey=cppmKey)
