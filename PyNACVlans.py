@@ -2,6 +2,8 @@ from netmiko import ConnectHandler
 import getpass, re
 from datetime import datetime
 
+start_timeall = datetime.now()
+
 #################################################################
 #Adds vlans to L2 Switches
 #Including: vlan 40,vlan 50,vlan 66,vlan 70
@@ -25,8 +27,8 @@ def AddL2NACVlan(ip, usr, paswd):
 
     vlanChange = vlan40 + vlan50 + vlan66 + vlan70 + vlan999
 
-    net_connect.send_config_set(vlanChange)
     prompt = net_connect.find_prompt()
+    net_connect.send_config_set(vlanChange)
     net_connect.save_config()
     net_connect.disconnect()
 
@@ -79,8 +81,8 @@ def AddL3NACVlan(ip, usr, paswd):
 
     vlanChange = vlan999 + vlan40 + vlan50 + vlan66 + vlan70
 
-    net_connect.send_config_set(vlanChange)
     prompt = net_connect.find_prompt()
+    net_connect.send_config_set(vlanChange)
     net_connect.save_config()
     net_connect.disconnect()
 
@@ -215,3 +217,12 @@ for n in ipsL3:
 
 for n in portL2:
     AddL2NACPorts(ip=n, usr='nsttech', paswd=PassWD, key=radiusKey, cppmKey=cppmKey)
+
+end_timeall = datetime.now()
+
+#Prints overall time of script
+print("\n")
+print("#" * 30)
+print ("Script" + " " + "Complete")
+print('Duration: {}'.format(end_timeall - start_timeall))
+print("#" * 30)
